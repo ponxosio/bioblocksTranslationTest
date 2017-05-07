@@ -1,0 +1,69 @@
+{
+  "tittle": "sequential",
+  "linkedBlocks": [
+    [
+      {
+        "timeOfOperation": "0",
+        "timeOfOperation_units": "s",
+        "linked": "FALSE",
+        "duration": "10",
+        "duration_units": "s",
+        "block_type": "continuous_flow",
+        "continuosflow_type": "1",
+        "source": {
+          "block_type": "container",
+          "containerName": "A",
+          "type": "1",
+          "destiny": "Ambient",
+          "initialVolume": "1",
+          "initialVolumeUnits": "ml"
+        },
+        "destination": {
+          "block_type": "container",
+          "containerName": "B",
+          "type": "1",
+          "destiny": "Ambient",
+          "rate": {
+            "block_type": "math_number",
+            "value": "10"
+          },
+          "rate_volume_units": "ml",
+          "rate_time_units": "hr",
+          "initialVolume": "0",
+          "initialVolumeUnits": "ml"
+        }
+      },
+      {
+        "timeOfOperation": "-1",
+        "timeOfOperation_units": "s",
+        "linked": "TRUE",
+        "duration": "10",
+        "duration_units": "s",
+        "block_type": "continuous_flow",
+        "continuosflow_type": "1",
+        "source": {
+          "block_type": "container",
+          "containerName": "B",
+          "type": "1",
+          "destiny": "Ambient",
+          "initialVolume": "1",
+          "initialVolumeUnits": "ml"
+        },
+        "destination": {
+          "block_type": "container",
+          "containerName": "C",
+          "type": "1",
+          "destiny": "Ambient",
+          "rate": {
+            "block_type": "math_number",
+            "value": "20"
+          },
+          "rate_volume_units": "ml",
+          "rate_time_units": "ms",
+          "initialVolume": "0",
+          "initialVolumeUnits": "ml"
+        }
+      }
+    ]
+  ]
+}

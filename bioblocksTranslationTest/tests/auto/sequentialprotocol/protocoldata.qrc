@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/protocols">
+        <file>protocolos/sequential.json</file>
+    </qresource>
+    <qresource prefix="/">
+        <file>protocolos/twoOperationsLinked.json</file>
+    </qresource>
+</RCC>
