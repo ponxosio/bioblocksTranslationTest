@@ -2,6 +2,9 @@
 #include <QTemporaryFile>
 #include <QFile>
 
+#include <algorithm>
+#include <vector>
+
 #include <bioblocksTranslation/bioblockstranslator.h>
 
 // add necessary includes here
@@ -18,10 +21,18 @@ public:
 
 private:
     void executeProtocol(std::shared_ptr<ProtocolGraph> protocol,ActuatorsExecutionInterface* actuatorInterfaz);
+    void copyResourceFile(const QString & resourcePath, QTemporaryFile* file) throw(std::invalid_argument);
 
 private slots:
     void oneOperationTest();
     void twoOperationsLinkedTest();
+    void twoOperationsParalelTest();
+    void twoOperationsUnknowDurationLinkedTest();
+    void twoOperationsUnknowDurationParalelTest();
+    void simpleIfYesTest();
+    void simpleIfNoTest();
+    void complexIfYesTest();
+    void complexIfNoTest();
 
 };
 
@@ -35,16 +46,19 @@ SequentialProtocol::~SequentialProtocol()
 
 }
 
+/*
+ * setContinuosFlow[0s:30s](A,B,10ml/hr);
+ */
 void SequentialProtocol::oneOperationTest()
 {
-    QTemporaryFile tempFile;
-    if (tempFile.open()) {
-        QFile::copy(":/protocols/protocols/sequential.json", tempFile.fileName());
+    QTemporaryFile* tempFile = new QTemporaryFile();
+    if (tempFile->open()) {
+        copyResourceFile(":/protocol/protocolos/sequential.json", tempFile);
 
         try {
-            BioBlocksTranslator translator;
-            //std::shared_ptr<ProtocolGraph> protocol = translator.translateFile(tempFile.fileName().toStdString());
-            std::shared_ptr<ProtocolGraph> protocol = translator.translateFile("X:/bioblocksTranslation/bioblocksTranslationTest/bioblocksTranslationTest/tests/auto/sequentialprotocol/protocolos/sequential.json");
+            BioBlocksTranslator translator(10*units::s, tempFile->fileName().toStdString());
+            std::shared_ptr<ProtocolGraph> protocol =
+                    translator.translateFile();
 
             qDebug() << protocol->toString().c_str();
 
@@ -55,28 +69,35 @@ void SequentialProtocol::oneOperationTest()
             qDebug() << "protocol execution";
             qDebug() << execution.c_str();
 
-            std::string expected = "setTimeStep(1000ms);setContinuosFlow(A,B,10ml/h);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopContinuosFlow(A,B);timeStep();timeStep();";
+            std::string expected = "setTimeStep(10000ms);setContinuosFlow(A,B,10ml/h);timeStep();timeStep();timeStep();stopContinuosFlow(A,B);timeStep();timeStep();";
             qDebug() << "protocol expected execution";
             qDebug() << expected.c_str();
 
             QVERIFY2(execution.compare(expected) == 0, "Execution and expected execution are not the same, check debug data for seeing where");
         } catch (std::exception & e) {
+            delete tempFile;
             QFAIL(e.what());
         }
     } else {
+        delete tempFile;
         QFAIL("imposible to create temporary file");
     }
+    delete tempFile;
 }
 
+/*
+ * continuousFlow[0s:10s](A,B,10ml/h);
+ * continuosFlow[-:10s](B,C,20ml/ms);
+ */
 void SequentialProtocol::twoOperationsLinkedTest() {
-    QTemporaryFile tempFile;
-    if (tempFile.open()) {
-        QFile::copy(":/protocols/protocols/twoOperationsLinked.json", tempFile.fileName());
+    QTemporaryFile* tempFile = new QTemporaryFile();
+    if (tempFile->open()) {
+        copyResourceFile(":/protocol/protocolos/twoOperationsLinked.json", tempFile);
 
         try {
-            BioBlocksTranslator translator;
-            //std::shared_ptr<ProtocolGraph> protocol = translator.translateFile(tempFile.fileName().toStdString());
-            std::shared_ptr<ProtocolGraph> protocol = translator.translateFile("X:/bioblocksTranslation/bioblocksTranslationTest/bioblocksTranslationTest/tests/auto/sequentialprotocol/protocolos/twoOperationsLinked.json");
+            BioBlocksTranslator translator(1*units::s, tempFile->fileName().toStdString());
+            std::shared_ptr<ProtocolGraph> protocol =
+                    translator.translateFile();
 
             qDebug() << protocol->toString().c_str();
 
@@ -87,17 +108,307 @@ void SequentialProtocol::twoOperationsLinkedTest() {
             qDebug() << "protocol execution";
             qDebug() << execution.c_str();
 
-            std::string expected = "";
+            std::string expected = "setTimeStep(1000ms);setContinuosFlow(A,B,10ml/h);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopContinuosFlow(A,B);setContinuosFlow(B,C,7.2e+07ml/h);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopContinuosFlow(B,C);timeStep();timeStep();";
             qDebug() << "protocol expected execution";
             qDebug() << expected.c_str();
 
             QVERIFY2(execution.compare(expected) == 0, "Execution and expected execution are not the same, check debug data for seeing where");
         } catch (std::exception & e) {
+            delete tempFile;
             QFAIL(e.what());
         }
     } else {
+        delete tempFile;
         QFAIL("imposible to create temporary file");
     }
+    delete tempFile;
+}
+
+/*
+ * continuosFlow[0s:10s](A,B,10ml/hr);
+ * continuousFlow[5s:5s](C,D,20ml/hr);
+ */
+void SequentialProtocol::twoOperationsParalelTest() {
+    QTemporaryFile* tempFile = new QTemporaryFile();
+    if (tempFile->open()) {
+        copyResourceFile(":/protocol/protocolos/twoOperationsParalel.json", tempFile);
+
+        try {
+            BioBlocksTranslator translator(1*units::s, tempFile->fileName().toStdString());
+            std::shared_ptr<ProtocolGraph> protocol =
+                    translator.translateFile();
+
+            qDebug() << protocol->toString().c_str();
+
+            StringActuatorsInterface* interface = new StringActuatorsInterface(std::vector<double>{});
+            executeProtocol(protocol, interface);
+
+            std::string execution = interface->getStream().str();
+            qDebug() << "protocol execution";
+            qDebug() << execution.c_str();
+
+            std::string expected = "setTimeStep(1000ms);setContinuosFlow(A,B,10ml/h);timeStep();timeStep();timeStep();timeStep();timeStep();setContinuosFlow(C,D,20ml/h);timeStep();timeStep();timeStep();timeStep();timeStep();stopContinuosFlow(A,B);stopContinuosFlow(C,D);timeStep();timeStep();";
+            qDebug() << "protocol expected execution";
+            qDebug() << expected.c_str();
+
+            QVERIFY2(execution.compare(expected) == 0, "Execution and expected execution are not the same, check debug data for seeing where");
+        } catch (std::exception & e) {
+            delete tempFile;
+            QFAIL(e.what());
+        }
+    } else {
+        delete tempFile;
+        QFAIL("imposible to create temporary file");
+    }
+    delete tempFile;
+}
+
+/*
+ * transfer[0s:](A,B,5ml);
+ * transfer[-:](B,C,7ml);
+ */
+void SequentialProtocol::twoOperationsUnknowDurationLinkedTest() {
+    QTemporaryFile* tempFile = new QTemporaryFile();
+    if (tempFile->open()) {
+        copyResourceFile(":/protocol/protocolos/twoOperationsUnknowDurationLinked.json", tempFile);
+
+        try {
+            BioBlocksTranslator translator(1*units::s, tempFile->fileName().toStdString());
+            std::shared_ptr<ProtocolGraph> protocol =
+                    translator.translateFile();
+
+            qDebug() << protocol->toString().c_str();
+
+            StringActuatorsInterface* interface = new StringActuatorsInterface(std::vector<double>{});
+            executeProtocol(protocol, interface);
+
+            std::string execution = interface->getStream().str();
+            qDebug() << "protocol execution";
+            qDebug() << execution.c_str();
+
+            std::string expected = "setTimeStep(1000ms);transfer(A,B,5ml);timeStep();timeStep();timeStep();timeStep();timeStep();stopTransfer(A,B);transfer(B,C,7ml);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopTransfer(B,C);timeStep();timeStep();";
+            qDebug() << "protocol expected execution";
+            qDebug() << expected.c_str();
+
+            QVERIFY2(execution.compare(expected) == 0, "Execution and expected execution are not the same, check debug data for seeing where");
+        } catch (std::exception & e) {
+            delete tempFile;
+            QFAIL(e.what());
+        }
+    } else {
+        delete tempFile;
+        QFAIL("imposible to create temporary file");
+    }
+    delete tempFile;
+}
+
+/*
+ * transfer[0s:](A,B,5ml);
+ * transfer[0s:](C,D,7ml);
+ */
+void SequentialProtocol::twoOperationsUnknowDurationParalelTest() {
+    QTemporaryFile* tempFile = new QTemporaryFile();
+    if (tempFile->open()) {
+        copyResourceFile(":/protocol/protocolos/twoOperationsUnknowDurationParalel.json", tempFile);
+
+        try {
+            BioBlocksTranslator translator(1*units::s, tempFile->fileName().toStdString());
+            std::shared_ptr<ProtocolGraph> protocol =
+                    translator.translateFile();
+
+            qDebug() << protocol->toString().c_str();
+
+            StringActuatorsInterface* interface = new StringActuatorsInterface(std::vector<double>{});
+            executeProtocol(protocol, interface);
+
+            std::string execution = interface->getStream().str();
+            qDebug() << "protocol execution";
+            qDebug() << execution.c_str();
+
+            std::string expected = "setTimeStep(1000ms);transfer(A,B,5ml);transfer(C,D,7ml);timeStep();timeStep();timeStep();timeStep();timeStep();stopTransfer(A,B);timeStep();timeStep();stopTransfer(C,D);timeStep();timeStep();";
+            qDebug() << "protocol expected execution";
+            qDebug() << expected.c_str();
+
+            QVERIFY2(execution.compare(expected) == 0, "Execution and expected execution are not the same, check debug data for seeing where");
+        } catch (std::exception & e) {
+            delete tempFile;
+            QFAIL(e.what());
+        }
+    } else {
+        delete tempFile;
+        QFAIL("imposible to create temporary file");
+    }
+    delete tempFile;
+}
+
+/*
+ * if[0s:](true) {
+ *  continuosFlow[-:3s](A,B,10ml/hr);
+ * }
+ * continuosFlow[-:5s](B,C,7ml/hr);
+ */
+void SequentialProtocol::simpleIfYesTest() {
+    QTemporaryFile* tempFile = new QTemporaryFile();
+    if (tempFile->open()) {
+        copyResourceFile(":/protocol/protocolos/simpleIfYes.json", tempFile);
+
+        try {
+            BioBlocksTranslator translator(1*units::s, tempFile->fileName().toStdString());
+            std::shared_ptr<ProtocolGraph> protocol =
+                    translator.translateFile();
+
+            qDebug() << protocol->toString().c_str();
+
+            StringActuatorsInterface* interface = new StringActuatorsInterface(std::vector<double>{});
+            executeProtocol(protocol, interface);
+
+            std::string execution = interface->getStream().str();
+            qDebug() << "protocol execution";
+            qDebug() << execution.c_str();
+
+            std::string expected = "setTimeStep(1000ms);setContinuosFlow(A,B,10ml/h);timeStep();timeStep();timeStep();stopContinuosFlow(A,B);setContinuosFlow(B,C,7ml/h);timeStep();timeStep();timeStep();timeStep();timeStep();stopContinuosFlow(B,C);timeStep();timeStep();";
+            qDebug() << "protocol expected execution";
+            qDebug() << expected.c_str();
+
+            QVERIFY2(execution.compare(expected) == 0, "Execution and expected execution are not the same, check debug data for seeing where");
+        } catch (std::exception & e) {
+            delete tempFile;
+            QFAIL(e.what());
+        }
+    } else {
+        delete tempFile;
+        QFAIL("imposible to create temporary file");
+    }
+    delete tempFile;
+}
+
+/*
+ * if[0s:](false) {
+ *  continuosFlow[-:3s](A,B,10ml/hr);
+ * }
+ * continuosFlow[-:5s](B,C,7ml/hr);
+ */
+void SequentialProtocol::simpleIfNoTest() {
+    QTemporaryFile* tempFile = new QTemporaryFile();
+    if (tempFile->open()) {
+        copyResourceFile(":/protocol/protocolos/simpleIfNo.json", tempFile);
+
+        try {
+            BioBlocksTranslator translator(1*units::s, tempFile->fileName().toStdString());
+            std::shared_ptr<ProtocolGraph> protocol =
+                    translator.translateFile();
+
+            qDebug() << protocol->toString().c_str();
+
+            StringActuatorsInterface* interface = new StringActuatorsInterface(std::vector<double>{});
+            executeProtocol(protocol, interface);
+
+            std::string execution = interface->getStream().str();
+            qDebug() << "protocol execution";
+            qDebug() << execution.c_str();
+
+            std::string expected = "setTimeStep(1000ms);setContinuosFlow(B,C,7ml/h);timeStep();timeStep();timeStep();timeStep();timeStep();stopContinuosFlow(B,C);timeStep();timeStep();";
+            qDebug() << "protocol expected execution";
+            qDebug() << expected.c_str();
+
+            QVERIFY2(execution.compare(expected) == 0, "Execution and expected execution are not the same, check debug data for seeing where");
+        } catch (std::exception & e) {
+            delete tempFile;
+            QFAIL(e.what());
+        }
+    } else {
+        delete tempFile;
+        QFAIL("imposible to create temporary file");
+    }
+    delete tempFile;
+}
+
+/*
+ * OD = measureOd[0s:2s](A,0Hz,650nm);
+ * if[-:](OD < 600) {
+ *  transfer[-:](B,A,2ml);
+ *  incubate[-:3s](A,26ºC,5Hz);
+ * }
+ * centrigugation[-:5s](A,50kHz,26ºC);
+ *
+ */
+void SequentialProtocol::complexIfYesTest() {
+    QTemporaryFile* tempFile = new QTemporaryFile();
+    if (tempFile->open()) {
+        copyResourceFile(":/protocol/protocolos/complexIf.json", tempFile);
+
+        try {
+            BioBlocksTranslator translator(200*units::ms, tempFile->fileName().toStdString());
+            std::shared_ptr<ProtocolGraph> protocol =
+                    translator.translateFile();
+
+            qDebug() << protocol->toString().c_str();
+
+            StringActuatorsInterface* interface = new StringActuatorsInterface(std::vector<double>{550});
+            executeProtocol(protocol, interface);
+
+            std::string execution = interface->getStream().str();
+            qDebug() << "protocol execution";
+            qDebug() << execution.c_str();
+
+            std::string expected = "setTimeStep(200ms);measureOD(A,0Hz,650nm);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();getMeasureOD(A);timeStep();transfer(B,A,2ml);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopTransfer(B,A);applyTemperature(A,26Cº);shake(A,5Hz);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);stopShake(A);applyTemperature(A,26Cº);centrifugate(A,50000Hz);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);stopCentrifugate(A);timeStep();";
+            qDebug() << "protocol expected execution";
+            qDebug() << expected.c_str();
+
+            QVERIFY2(execution.compare(expected) == 0, "Execution and expected execution are not the same, check debug data for seeing where");
+        } catch (std::exception & e) {
+            delete tempFile;
+            QFAIL(e.what());
+        }
+    } else {
+        delete tempFile;
+        QFAIL("imposible to create temporary file");
+    }
+    delete tempFile;
+}
+
+/*
+ * OD = measureOd[0s:2s](A,0Hz,650nm);
+ * if[-:](OD < 600) {
+ *  transfer[-:](B,A,2ml);
+ *  incubate[-:3s](A,26ºC,5Hz);
+ * }
+ * centrigugation[-:5s](A,50kHz,26ºC);
+ *
+ */
+void SequentialProtocol::complexIfNoTest() {
+    QTemporaryFile* tempFile = new QTemporaryFile();
+    if (tempFile->open()) {
+        copyResourceFile(":/protocol/protocolos/complexIf.json", tempFile);
+
+        try {
+            BioBlocksTranslator translator(200*units::ms, tempFile->fileName().toStdString());
+            std::shared_ptr<ProtocolGraph> protocol =
+                    translator.translateFile();
+
+            qDebug() << protocol->toString().c_str();
+
+            StringActuatorsInterface* interface = new StringActuatorsInterface(std::vector<double>{650});
+            executeProtocol(protocol, interface);
+
+            std::string execution = interface->getStream().str();
+            qDebug() << "protocol execution";
+            qDebug() << execution.c_str();
+
+            std::string expected = "setTimeStep(200ms);measureOD(A,0Hz,650nm);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();getMeasureOD(A);timeStep();transfer(B,A,2ml);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopTransfer(B,A);applyTemperature(A,26Cº);shake(A,5Hz);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);stopShake(A);applyTemperature(A,26Cº);centrifugate(A,50000Hz);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);stopCentrifugate(A);timeStep();";
+            qDebug() << "protocol expected execution";
+            qDebug() << expected.c_str();
+
+            QVERIFY2(execution.compare(expected) == 0, "Execution and expected execution are not the same, check debug data for seeing where");
+        } catch (std::exception & e) {
+            delete tempFile;
+            QFAIL(e.what());
+        }
+    } else {
+        delete tempFile;
+        QFAIL("imposible to create temporary file");
+    }
+    delete tempFile;
 }
 
 void SequentialProtocol::executeProtocol(std::shared_ptr<ProtocolGraph> protocol,ActuatorsExecutionInterface* actuatorInterfaz) {
@@ -115,10 +426,29 @@ void SequentialProtocol::executeProtocol(std::shared_ptr<ProtocolGraph> protocol
         ProtocolGraph::ProtocolEdgeVectorPtr leaving = protocol->getProjectingEdges(nextId);
         for(const ProtocolGraph::ProtocolEdgePtr & edge: *leaving.get()) {
             if (edge->conditionMet()) {
-                nodes2process.push_back(edge->getIdTarget());
+                int nextop = edge->getIdTarget();
+                if (find(nodes2process.begin(),nodes2process.end(), nextop) == nodes2process.end()) {
+                    nodes2process.push_back(nextop);
+                }
             }
         }
     }
+}
+
+void SequentialProtocol::copyResourceFile(const QString & resourcePath, QTemporaryFile* tempFile) throw(std::invalid_argument) {
+    QFile resourceFile(resourcePath);
+    if(!resourceFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        throw(std::invalid_argument("imposible to open" + resourcePath.toStdString()));
+    }
+
+    QTextStream out(tempFile);
+
+    QTextStream in(&resourceFile);
+    while (!in.atEnd()) {
+        QString line = in.readLine();
+        out << line;
+    }
+    out.flush();
 }
 
 QTEST_APPLESS_MAIN(SequentialProtocol)

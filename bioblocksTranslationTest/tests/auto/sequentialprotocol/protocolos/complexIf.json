@@ -1,0 +1,150 @@
+{
+  "tittle": "complex_if",
+  "linkedBlocks": [
+    [
+      {
+        "timeOfOperation": "0",
+        "timeOfOperation_units": "ms",
+        "linked": "FALSE",
+        "duration": "2",
+        "duration_units": "s",
+        "block_type": "measurement",
+        "measurement_type": "1",
+        "measurement_frequency": {
+          "block_type": "math_number",
+          "value": "0"
+        },
+        "unit_frequency": "hz",
+        "data_reference": {
+          "block_type": "variables_get",
+          "variable": "OD"
+        },
+        "source": {
+          "block_type": "container",
+          "containerName": "A",
+          "type": "1",
+          "destiny": "Ambient",
+          "initialVolume": "1",
+          "initialVolumeUnits": "ml"
+        },
+        "wavelengthnum": {
+          "block_type": "math_number",
+          "value": "650"
+        },
+        "wavelengthnum_units": "nm"
+      },
+      {
+        "block_type": "controls_if",
+        "branches": [
+          {
+            "condition": {
+              "block_type": "logic_compare",
+              "left": {
+                "block_type": "variables_get",
+                "variable": "OD"
+              },
+              "rigth": {
+                "block_type": "math_number",
+                "value": "600"
+              },
+              "op": "LT"
+            },
+            "nestedOp": [
+              {
+                "timeOfOperation": "-1",
+                "timeOfOperation_units": "ms",
+                "linked": "TRUE",
+                "block_type": "pipette",
+                "pipetteTypeName": "1",
+                "aspirationspeed": "---",
+                "dispensespeed": "---",
+                "mixafterbefore": "TRUE",
+                "source": {
+                  "block_type": "container",
+                  "containerName": "B",
+                  "type": "2",
+                  "destiny": "Ambient",
+                  "initialVolume": "5",
+                  "initialVolumeUnits": "ml"
+                },
+                "destination": {
+                  "block_type": "container",
+                  "containerName": "A",
+                  "type": "1",
+                  "destiny": "Ambient",
+                  "volume": {
+                    "block_type": "math_number",
+                    "value": "2"
+                  },
+                  "unit_volume": "ml",
+                  "initialVolume": "1",
+                  "initialVolumeUnits": "ml"
+                }
+              },
+              {
+                "timeOfOperation": "-1",
+                "timeOfOperation_units": "ms",
+                "linked": "TRUE",
+                "duration": "3",
+                "duration_units": "s",
+                "block_type": "incubate",
+                "temperature": {
+                  "block_type": "math_number",
+                  "value": "26"
+                },
+                "temperature_units": "c",
+                "shaking_speed": {
+                  "block_type": "math_number",
+                  "value": "5"
+                },
+                "shaking_speed_units": "hz",
+                "c02_percent": {
+                  "block_type": "math_number",
+                  "value": "50"
+                },
+                "source": {
+                  "block_type": "container",
+                  "containerName": "A",
+                  "type": "1",
+                  "destiny": "Ambient",
+                  "initialVolume": "1",
+                  "initialVolumeUnits": "ml"
+                }
+              }
+            ]
+          }
+        ],
+        "numberOfBranches": 1,
+        "timeOfOperation": "-1",
+        "timeOfOperation_units": "ms",
+        "linked": "TRUE"
+      },
+      {
+        "timeOfOperation": "-1",
+        "timeOfOperation_units": "ms",
+        "linked": "TRUE",
+        "duration": "5",
+        "duration_units": "s",
+        "block_type": "centrifugation",
+        "speed": {
+          "block_type": "math_number",
+          "value": "50"
+        },
+        "speed_units": "khz",
+        "temperature": {
+          "block_type": "math_number",
+          "value": "26"
+        },
+        "temperature_units": "c",
+        "source": {
+          "block_type": "container",
+          "containerName": "A",
+          "type": "1",
+          "destiny": "Ambient",
+          "initialVolume": "1",
+          "initialVolumeUnits": "ml"
+        }
+      }
+    ]
+  ]
+}

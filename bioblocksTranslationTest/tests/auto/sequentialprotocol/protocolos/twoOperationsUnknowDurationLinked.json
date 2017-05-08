@@ -1,0 +1,69 @@
+{
+  "tittle": "two_operations_linked_unknow_duration",
+  "linkedBlocks": [
+    [
+      {
+        "timeOfOperation": "0",
+        "timeOfOperation_units": "ms",
+        "linked": "FALSE",
+        "block_type": "pipette",
+        "pipetteTypeName": "1",
+        "aspirationspeed": "---",
+        "dispensespeed": "---",
+        "mixafterbefore": "TRUE",
+        "source": {
+          "block_type": "container",
+          "containerName": "A",
+          "type": "1",
+          "destiny": "Ambient",
+          "initialVolume": "0",
+          "initialVolumeUnits": "ml"
+        },
+        "destination": {
+          "block_type": "container",
+          "containerName": "B",
+          "type": "1",
+          "destiny": "Ambient",
+          "volume": {
+            "block_type": "math_number",
+            "value": "5"
+          },
+          "unit_volume": "ml",
+          "initialVolume": "0",
+          "initialVolumeUnits": "ml"
+        }
+      },
+      {
+        "timeOfOperation": "-1",
+        "timeOfOperation_units": "ms",
+        "linked": "TRUE",
+        "block_type": "pipette",
+        "pipetteTypeName": "1",
+        "aspirationspeed": "---",
+        "dispensespeed": "---",
+        "mixafterbefore": "TRUE",
+        "source": {
+          "block_type": "container",
+          "containerName": "B",
+          "type": "1",
+          "destiny": "Ambient",
+          "initialVolume": "0",
+          "initialVolumeUnits": "ml"
+        },
+        "destination": {
+          "block_type": "container",
+          "containerName": "C",
+          "type": "1",
+          "destiny": "Ambient",
+          "volume": {
+            "block_type": "math_number",
+            "value": "7"
+          },
+          "unit_volume": "ml",
+          "initialVolume": "0",
+          "initialVolumeUnits": "ml"
+        }
+      }
+    ]
+  ]
+}

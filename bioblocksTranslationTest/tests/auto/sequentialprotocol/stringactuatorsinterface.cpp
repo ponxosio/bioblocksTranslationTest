@@ -145,6 +145,14 @@ units::Time StringActuatorsInterface::mix(
     return (volume1.to(units::ml) * units::s + volume2.to(units::ml) * units::s);
 }
 
+void StringActuatorsInterface::stopMix(
+        const std::string & idSource1,
+        const std::string & idSource2,
+        const std::string & idTarget)
+{
+    stream << "stopMix(" << idSource1 << "," << idSource2 << "," << idTarget << ");";
+}
+
 void StringActuatorsInterface::setContinuosFlow(
         const std::string & idSource,
         const std::string & idTarget,
@@ -165,6 +173,10 @@ units::Time StringActuatorsInterface::transfer(
 {
     stream << "transfer(" << idSource << "," << idTarget << "," << volume.to(units::ml) << "ml" << ");";
     return (volume.to(units::ml) * units::s);
+}
+
+void StringActuatorsInterface::stopTransfer(const std::string & idSource, const std::string & idTarget) {
+    stream << "stopTransfer(" << idSource << "," << idTarget << ");";
 }
 
 void StringActuatorsInterface::setTimeStep(units::Time time) {

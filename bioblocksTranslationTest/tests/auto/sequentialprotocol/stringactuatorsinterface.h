@@ -56,11 +56,17 @@ public:
     virtual void stopContinuosFlow(const std::string & idSource, const std::string & idTarget);
 
     virtual units::Time transfer(const std::string & idSource, const std::string & idTarget, units::Volume volume);
+    virtual void stopTransfer(const std::string & idSource, const std::string & idTarget);
+
     virtual units::Time mix(const std::string & idSource1,
                             const std::string & idSource2,
                             const std::string & idTarget,
                             units::Volume volume1,
                             units::Volume volume2);
+
+    virtual void stopMix(const std::string & idSource1,
+                         const std::string & idSource2,
+                         const std::string & idTarget);
 
     virtual void setTimeStep(units::Time time);
     virtual units::Time timeStep();

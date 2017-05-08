@@ -1,8 +1,12 @@
 <RCC>
-    <qresource prefix="/protocols">
-        <file>protocolos/sequential.json</file>
-    </qresource>
-    <qresource prefix="/">
+    <qresource prefix="/protocol">
         <file>protocolos/twoOperationsLinked.json</file>
+        <file>protocolos/twoOperationsParalel.json</file>
+        <file>protocolos/twoOperationsUnknowDurationLinked.json</file>
+        <file>protocolos/sequential.json</file>
+        <file>protocolos/twoOperationsUnknowDurationParalel.json</file>
+        <file>protocolos/simpleIfNo.json</file>
+        <file>protocolos/simpleIfYes.json</file>
+        <file>protocolos/complexIf.json</file>
     </qresource>
 </RCC>
