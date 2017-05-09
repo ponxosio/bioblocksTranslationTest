@@ -1,0 +1,20 @@
+<RCC>
+    <qresource prefix="/protocol">
+        <file>protocolos/complexIf.json</file>
+        <file>protocolos/elifB2.json</file>
+        <file>protocolos/sequential.json</file>
+        <file>protocolos/simpleIfNo.json</file>
+        <file>protocolos/simpleIfYes.json</file>
+        <file>protocolos/twoOperationsLinked.json</file>
+        <file>protocolos/twoOperationsParalel.json</file>
+        <file>protocolos/unknowDurationLinked.json</file>
+        <file>protocolos/unknowDurationParalel.json</file>
+        <file>protocolos/elifB1.json</file>
+        <file>protocolos/elifNoB.json</file>
+        <file>protocolos/ifElseElse.json</file>
+        <file>protocolos/ifElseIf.json</file>
+        <file>protocolos/nestedIf.json</file>
+        <file>protocolos/loop.json</file>
+        <file>protocolos/thermocycling.json</file>
+    </qresource>
+</RCC>

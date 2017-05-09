@@ -27,8 +27,6 @@ SOURCES +=  tst_sequentialprotocol.cpp \
     stringactuatorsinterface.cpp
 
 debug {
-    QMAKE_POST_LINK=X:\bioblocksTranslation\bioblocksTranslation\setDLL.bat $$shell_path($$OUT_PWD/debug) debug
-
     INCLUDEPATH += X:\utils\dll_debug\include
     LIBS += -L$$quote(X:\utils\dll_debug\bin) -lutils
 
@@ -40,8 +38,6 @@ debug {
 }
 
 !debug {
-    QMAKE_POST_LINK=X:\protocolGraph\protocolGraph\setDLL.bat $$shell_path($$OUT_PWD/release) release
-
     INCLUDEPATH += X:\utils\dll_release\include
     LIBS += -L$$quote(X:\utils\dll_release\bin) -lutils
 
@@ -57,7 +53,7 @@ INCLUDEPATH += X:\libraries\boost_1_63_0
 INCLUDEPATH += X:\libraries\cereal-1.2.2\include
 
 RESOURCES += \
-    protocoldata.qrc
+    protocols.qrc
 
 HEADERS += \
     stringactuatorsinterface.h
