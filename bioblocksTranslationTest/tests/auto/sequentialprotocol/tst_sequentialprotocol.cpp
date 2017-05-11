@@ -79,7 +79,7 @@ void SequentialProtocol::oneOperationTest()
             qDebug() << "protocol execution";
             qDebug() << execution.c_str();
 
-            std::string expected = "setTimeStep(10000ms);setContinuosFlow(A,B,10ml/h);timeStep();timeStep();timeStep();stopContinuosFlow(A,B);timeStep();timeStep();";
+            std::string expected = "setTimeStep(10000ms);loadContainer(A,1ml);loadContainer(B,0ml);setContinuosFlow(A,B,10ml/h);timeStep();timeStep();timeStep();stopContinuosFlow(A,B);timeStep();timeStep();";
             qDebug() << "protocol expected execution";
             qDebug() << expected.c_str();
 
@@ -118,7 +118,7 @@ void SequentialProtocol::twoOperationsLinkedTest() {
             qDebug() << "protocol execution";
             qDebug() << execution.c_str();
 
-            std::string expected = "setTimeStep(1000ms);setContinuosFlow(A,B,10ml/h);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopContinuosFlow(A,B);setContinuosFlow(B,C,7.2e+07ml/h);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopContinuosFlow(B,C);timeStep();timeStep();";
+            std::string expected = "setTimeStep(1000ms);loadContainer(A,1ml);loadContainer(B,0ml);loadContainer(C,0ml);setContinuosFlow(A,B,10ml/h);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopContinuosFlow(A,B);setContinuosFlow(B,C,7.2e+07ml/h);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopContinuosFlow(B,C);timeStep();timeStep();";
             qDebug() << "protocol expected execution";
             qDebug() << expected.c_str();
 
@@ -157,7 +157,7 @@ void SequentialProtocol::twoOperationsParalelTest() {
             qDebug() << "protocol execution";
             qDebug() << execution.c_str();
 
-            std::string expected = "setTimeStep(1000ms);setContinuosFlow(A,B,10ml/h);timeStep();timeStep();timeStep();timeStep();timeStep();setContinuosFlow(C,D,20ml/h);timeStep();timeStep();timeStep();timeStep();timeStep();stopContinuosFlow(A,B);stopContinuosFlow(C,D);timeStep();timeStep();";
+            std::string expected = "setTimeStep(1000ms);loadContainer(A,0ml);loadContainer(B,0ml);loadContainer(C,0ml);loadContainer(D,0ml);setContinuosFlow(A,B,10ml/h);timeStep();timeStep();timeStep();timeStep();timeStep();setContinuosFlow(C,D,20ml/h);timeStep();timeStep();timeStep();timeStep();timeStep();stopContinuosFlow(A,B);stopContinuosFlow(C,D);timeStep();timeStep();";
             qDebug() << "protocol expected execution";
             qDebug() << expected.c_str();
 
@@ -196,7 +196,7 @@ void SequentialProtocol::twoOperationsUnknowDurationLinkedTest() {
             qDebug() << "protocol execution";
             qDebug() << execution.c_str();
 
-            std::string expected = "setTimeStep(1000ms);transfer(A,B,5ml);timeStep();timeStep();timeStep();timeStep();timeStep();stopTransfer(A,B);transfer(B,C,7ml);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopTransfer(B,C);timeStep();timeStep();";
+            std::string expected = "setTimeStep(1000ms);loadContainer(A,0ml);loadContainer(B,0ml);loadContainer(C,0ml);transfer(A,B,5ml);timeStep();timeStep();timeStep();timeStep();timeStep();stopTransfer(A,B);transfer(B,C,7ml);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopTransfer(B,C);timeStep();timeStep();";
             qDebug() << "protocol expected execution";
             qDebug() << expected.c_str();
 
@@ -235,7 +235,7 @@ void SequentialProtocol::twoOperationsUnknowDurationParalelTest() {
             qDebug() << "protocol execution";
             qDebug() << execution.c_str();
 
-            std::string expected = "setTimeStep(1000ms);transfer(A,B,5ml);transfer(C,D,7ml);timeStep();timeStep();timeStep();timeStep();timeStep();stopTransfer(A,B);timeStep();timeStep();stopTransfer(C,D);timeStep();timeStep();";
+            std::string expected = "setTimeStep(1000ms);loadContainer(A,0ml);loadContainer(B,0ml);loadContainer(C,0ml);loadContainer(D,0ml);transfer(A,B,5ml);transfer(C,D,7ml);timeStep();timeStep();timeStep();timeStep();timeStep();stopTransfer(A,B);timeStep();timeStep();stopTransfer(C,D);timeStep();timeStep();";
             qDebug() << "protocol expected execution";
             qDebug() << expected.c_str();
 
@@ -276,7 +276,7 @@ void SequentialProtocol::simpleIfYesTest() {
             qDebug() << "protocol execution";
             qDebug() << execution.c_str();
 
-            std::string expected = "setTimeStep(1000ms);setContinuosFlow(A,B,10ml/h);timeStep();timeStep();timeStep();stopContinuosFlow(A,B);setContinuosFlow(B,C,7ml/h);timeStep();timeStep();timeStep();timeStep();timeStep();stopContinuosFlow(B,C);timeStep();timeStep();";
+            std::string expected = "setTimeStep(1000ms);loadContainer(A,0ml);loadContainer(B,0ml);loadContainer(C,0ml);setContinuosFlow(A,B,10ml/h);timeStep();timeStep();timeStep();stopContinuosFlow(A,B);setContinuosFlow(B,C,7ml/h);timeStep();timeStep();timeStep();timeStep();timeStep();stopContinuosFlow(B,C);timeStep();timeStep();";
             qDebug() << "protocol expected execution";
             qDebug() << expected.c_str();
 
@@ -317,7 +317,7 @@ void SequentialProtocol::simpleIfNoTest() {
             qDebug() << "protocol execution";
             qDebug() << execution.c_str();
 
-            std::string expected = "setTimeStep(1000ms);setContinuosFlow(B,C,7ml/h);timeStep();timeStep();timeStep();timeStep();timeStep();stopContinuosFlow(B,C);timeStep();timeStep();";
+            std::string expected = "setTimeStep(1000ms);loadContainer(A,0ml);loadContainer(B,0ml);loadContainer(C,0ml);setContinuosFlow(B,C,7ml/h);timeStep();timeStep();timeStep();timeStep();timeStep();stopContinuosFlow(B,C);timeStep();timeStep();";
             qDebug() << "protocol expected execution";
             qDebug() << expected.c_str();
 
@@ -361,7 +361,7 @@ void SequentialProtocol::complexIfYesTest() {
             qDebug() << "protocol execution";
             qDebug() << execution.c_str();
 
-            std::string expected = "setTimeStep(200ms);measureOD(A,0Hz,650nm);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();getMeasureOD(A);timeStep();transfer(B,A,2ml);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopTransfer(B,A);applyTemperature(A,26Cº);shake(A,5Hz);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);stopShake(A);applyTemperature(A,26Cº);centrifugate(A,50000Hz);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);stopCentrifugate(A);timeStep();";
+            std::string expected = "setTimeStep(200ms);loadContainer(A,1ml);loadContainer(B,5ml);measureOD(A,0Hz,650nm);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();getMeasureOD(A);timeStep();transfer(B,A,2ml);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopTransfer(B,A);applyTemperature(A,26Cº);shake(A,5Hz);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);stopShake(A);applyTemperature(A,26Cº);centrifugate(A,50000Hz);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);stopCentrifugate(A);timeStep();";
             qDebug() << "protocol expected execution";
             qDebug() << expected.c_str();
 
@@ -405,7 +405,7 @@ void SequentialProtocol::complexIfNoTest() {
             qDebug() << "protocol execution";
             qDebug() << execution.c_str();
 
-            std::string expected = "setTimeStep(200ms);measureOD(A,0Hz,650nm);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();getMeasureOD(A);timeStep();applyTemperature(A,26Cº);centrifugate(A,50000Hz);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);stopCentrifugate(A);timeStep();";
+            std::string expected = "setTimeStep(200ms);loadContainer(A,1ml);loadContainer(B,5ml);measureOD(A,0Hz,650nm);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();getMeasureOD(A);timeStep();applyTemperature(A,26Cº);centrifugate(A,50000Hz);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);stopCentrifugate(A);timeStep();timeStep();";
             qDebug() << "protocol expected execution";
             qDebug() << expected.c_str();
 
@@ -450,7 +450,7 @@ void SequentialProtocol::elifB2Test() {
             qDebug() << "protocol execution";
             qDebug() << execution.c_str();
 
-            std::string expected = "setTimeStep(200ms);stir(A,50Hz);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopStir(A);applyTemperature(A,26Cº);centrifugate(A,50Hz);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);stopCentrifugate(A);timeStep();";
+            std::string expected = "setTimeStep(200ms);loadContainer(B,0ml);loadContainer(A,0ml);stir(A,50Hz);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopStir(A);applyTemperature(A,26Cº);centrifugate(A,50Hz);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);stopCentrifugate(A);timeStep();";
             qDebug() << "protocol expected execution";
             qDebug() << expected.c_str();
 
@@ -495,52 +495,7 @@ void SequentialProtocol::elifB1Test() {
             qDebug() << "protocol execution";
             qDebug() << execution.c_str();
 
-            std::string expected = "setTimeStep(200ms);setContinuosFlow(B,A,5ml/h);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopContinuosFlow(B,A);applyTemperature(A,26Cº);centrifugate(A,50Hz);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);stopCentrifugate(A);timeStep();";
-            qDebug() << "protocol expected execution";
-            qDebug() << expected.c_str();
-
-            QVERIFY2(execution.compare(expected) == 0, "Execution and expected execution are not the same, check debug data for seeing where");
-        } catch (std::exception & e) {
-            delete tempFile;
-            QFAIL(e.what());
-        }
-    } else {
-        delete tempFile;
-        QFAIL("imposible to create temporary file");
-    }
-    delete tempFile;
-}
-
-/*
- * flag = -1;
- * if[-:](flag > 0) {
- *  continuosFlow[-:2s](B,A,5ml/hr);
- * } else {
- *  mix[-:3s](A,vortex,50Hz);
- * }
- * centrifugation[-:5s](A,50hz,26ºC)
- *
- */
-void SequentialProtocol::ifElseElseTest() {
-    QTemporaryFile* tempFile = new QTemporaryFile();
-    if (tempFile->open()) {
-        try {
-            copyResourceFile(":/protocol/protocolos/ifElseElse.json", tempFile);
-
-            BioBlocksTranslator translator(200*units::ms, tempFile->fileName().toStdString());
-            std::shared_ptr<ProtocolGraph> protocol =
-                    translator.translateFile();
-
-            qDebug() << protocol->toString().c_str();
-
-            StringActuatorsInterface* interface = new StringActuatorsInterface(std::vector<double>{650});
-            executeProtocol(protocol, interface);
-
-            std::string execution = interface->getStream().str();
-            qDebug() << "protocol execution";
-            qDebug() << execution.c_str();
-
-            std::string expected = "setTimeStep(200ms);stir(A,50Hz);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopStir(A);applyTemperature(A,26Cº);centrifugate(A,50Hz);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);stopCentrifugate(A);timeStep();";
+            std::string expected = "setTimeStep(200ms);loadContainer(B,0ml);loadContainer(A,0ml);setContinuosFlow(B,A,5ml/h);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopContinuosFlow(B,A);applyTemperature(A,26Cº);centrifugate(A,50Hz);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);stopCentrifugate(A);timeStep();timeStep();";
             qDebug() << "protocol expected execution";
             qDebug() << expected.c_str();
 
@@ -585,7 +540,52 @@ void SequentialProtocol::elifNoBTest() {
             qDebug() << "protocol execution";
             qDebug() << execution.c_str();
 
-            std::string expected = "setTimeStep(200ms);applyTemperature(A,26Cº);centrifugate(A,50Hz);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);stopCentrifugate(A);timeStep();";
+            std::string expected = "setTimeStep(200ms);loadContainer(B,0ml);loadContainer(A,0ml);applyTemperature(A,26Cº);centrifugate(A,50Hz);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);stopCentrifugate(A);timeStep();timeStep();";
+            qDebug() << "protocol expected execution";
+            qDebug() << expected.c_str();
+
+            QVERIFY2(execution.compare(expected) == 0, "Execution and expected execution are not the same, check debug data for seeing where");
+        } catch (std::exception & e) {
+            delete tempFile;
+            QFAIL(e.what());
+        }
+    } else {
+        delete tempFile;
+        QFAIL("imposible to create temporary file");
+    }
+    delete tempFile;
+}
+
+/*
+ * flag = -1;
+ * if[-:](flag > 0) {
+ *  continuosFlow[-:2s](B,A,5ml/hr);
+ * } else {
+ *  mix[-:3s](A,vortex,50Hz);
+ * }
+ * centrifugation[-:5s](A,50hz,26ºC)
+ *
+ */
+void SequentialProtocol::ifElseElseTest() {
+    QTemporaryFile* tempFile = new QTemporaryFile();
+    if (tempFile->open()) {
+        try {
+            copyResourceFile(":/protocol/protocolos/ifElseElse.json", tempFile);
+
+            BioBlocksTranslator translator(200*units::ms, tempFile->fileName().toStdString());
+            std::shared_ptr<ProtocolGraph> protocol =
+                    translator.translateFile();
+
+            qDebug() << protocol->toString().c_str();
+
+            StringActuatorsInterface* interface = new StringActuatorsInterface(std::vector<double>{650});
+            executeProtocol(protocol, interface);
+
+            std::string execution = interface->getStream().str();
+            qDebug() << "protocol execution";
+            qDebug() << execution.c_str();
+
+            std::string expected = "setTimeStep(200ms);loadContainer(B,0ml);loadContainer(A,0ml);stir(A,50Hz);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopStir(A);applyTemperature(A,26Cº);centrifugate(A,50Hz);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);stopCentrifugate(A);timeStep();";
             qDebug() << "protocol expected execution";
             qDebug() << expected.c_str();
 
@@ -618,7 +618,7 @@ void SequentialProtocol::ifElseIfTest() {
         try {
             copyResourceFile(":/protocol/protocolos/ifElseIf.json", tempFile);
 
-            BioBlocksTranslator translator(200*units::ms, tempFile->fileName().toStdString());
+            BioBlocksTranslator translator(200.0 * units::ms, tempFile->fileName().toStdString());
             std::shared_ptr<ProtocolGraph> protocol =
                     translator.translateFile();
 
@@ -631,7 +631,7 @@ void SequentialProtocol::ifElseIfTest() {
             qDebug() << "protocol execution";
             qDebug() << execution.c_str();
 
-            std::string expected = "setTimeStep(200ms);setContinuosFlow(B,A,5ml/h);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopContinuosFlow(B,A);applyTemperature(A,26Cº);shake(A,50Hz);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);stopShake(A);applyTemperature(A,26Cº);centrifugate(A,50Hz);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);stopCentrifugate(A);timeStep();";
+            std::string expected = "setTimeStep(200ms);loadContainer(B,0ml);loadContainer(A,0ml);setContinuosFlow(B,A,5ml/h);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopContinuosFlow(B,A);applyTemperature(A,26Cº);shake(A,50Hz);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);stopShake(A);applyTemperature(A,26Cº);centrifugate(A,50Hz);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);stopCentrifugate(A);timeStep();";
             qDebug() << "protocol expected execution";
             qDebug() << expected.c_str();
 
@@ -677,7 +677,7 @@ void SequentialProtocol::nestedIfsTestNoBTest() {
             qDebug() << "protocol execution";
             qDebug() << execution.c_str();
 
-            std::string expected = "setTimeStep(200ms);measureOD(A,50Hz,650nm);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();getMeasureOD(A);timeStep();startElectrophoresis(A,2V/cm);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopElectrophoresis(A);timeStep();";
+            std::string expected = "setTimeStep(200ms);loadContainer(A,1ml);loadContainer(B,1.5ml);loadContainer(C,0ml);measureOD(A,50Hz,650nm);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();getMeasureOD(A);timeStep();startElectrophoresis(A,2V/cm);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopElectrophoresis(A);timeStep();timeStep();";
             qDebug() << "protocol expected execution";
             qDebug() << expected.c_str();
 
@@ -723,7 +723,7 @@ void SequentialProtocol::nestedIfsTestB1Test() {
             qDebug() << "protocol execution";
             qDebug() << execution.c_str();
 
-            std::string expected = "setTimeStep(200ms);measureOD(A,50Hz,650nm);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();getMeasureOD(A);timeStep();transfer(B,A,0.5ml);timeStep();timeStep();stopTransfer(B,A);applyTemperature(A,26Cº);shake(A,50Hz);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);stopShake(A);measureFluorescence(A,50Hz,650nm, 650nm);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();getMeasureFluorescence(A);timeStep();startElectrophoresis(A,2V/cm);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopElectrophoresis(A);timeStep();";
+            std::string expected = "setTimeStep(200ms);loadContainer(A,1ml);loadContainer(B,1.5ml);loadContainer(C,0ml);measureOD(A,50Hz,650nm);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();getMeasureOD(A);timeStep();transfer(B,A,0.5ml);timeStep();timeStep();timeStep();stopTransfer(B,A);applyTemperature(A,26Cº);shake(A,50Hz);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);stopShake(A);measureFluorescence(A,50Hz,650nm, 650nm);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();getMeasureFluorescence(A);timeStep();startElectrophoresis(A,2V/cm);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopElectrophoresis(A);timeStep();";
             qDebug() << "protocol expected execution";
             qDebug() << expected.c_str();
 
@@ -769,7 +769,7 @@ void SequentialProtocol::nestedIfsTestB1N1Test() {
             qDebug() << "protocol execution";
             qDebug() << execution.c_str();
 
-            std::string expected = "setTimeStep(200ms);measureOD(A,50Hz,650nm);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();getMeasureOD(A);timeStep();transfer(B,A,0.5ml);timeStep();timeStep();stopTransfer(B,A);applyTemperature(A,26Cº);shake(A,50Hz);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);stopShake(A);measureFluorescence(A,50Hz,650nm, 650nm);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();getMeasureFluorescence(A);timeStep();transfer(A,C,1.5ml);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopTransfer(A,C);startElectrophoresis(A,2V/cm);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopElectrophoresis(A);timeStep();";
+            std::string expected = "setTimeStep(200ms);loadContainer(A,1ml);loadContainer(B,1.5ml);loadContainer(C,0ml);measureOD(A,50Hz,650nm);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();getMeasureOD(A);timeStep();transfer(B,A,0.5ml);timeStep();timeStep();timeStep();stopTransfer(B,A);applyTemperature(A,26Cº);shake(A,50Hz);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);stopShake(A);measureFluorescence(A,50Hz,650nm, 650nm);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();getMeasureFluorescence(A);timeStep();transfer(A,C,1.5ml);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopTransfer(A,C);startElectrophoresis(A,2V/cm);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopElectrophoresis(A);timeStep();";
             qDebug() << "protocol expected execution";
             qDebug() << expected.c_str();
 
@@ -812,7 +812,7 @@ void SequentialProtocol::loopTest() {
             qDebug() << "protocol execution";
             qDebug() << execution.c_str();
 
-            std::string expected = "setTimeStep(200ms);applyTemperature(A,26Cº);shake(A,50Hz);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);stopShake(A);measureOD(A,5Hz,650nm);timeStep();timeStep();timeStep();timeStep();timeStep();getMeasureOD(A);timeStep();applyTemperature(A,26Cº);shake(A,50Hz);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);stopShake(A);measureOD(A,5Hz,650nm);timeStep();timeStep();timeStep();timeStep();timeStep();getMeasureOD(A);timeStep();applyTemperature(A,26Cº);shake(A,50Hz);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);stopShake(A);measureOD(A,5Hz,650nm);timeStep();timeStep();timeStep();timeStep();timeStep();getMeasureOD(A);timeStep();applyTemperature(A,26Cº);shake(A,50Hz);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);stopShake(A);measureOD(A,5Hz,650nm);timeStep();timeStep();timeStep();timeStep();timeStep();getMeasureOD(A);timeStep();applyTemperature(A,26Cº);shake(A,50Hz);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);stopShake(A);measureOD(A,5Hz,650nm);timeStep();timeStep();timeStep();timeStep();timeStep();getMeasureOD(A);timeStep();transfer(A,B,1ml);timeStep();timeStep();timeStep();timeStep();timeStep();stopTransfer(A,B);applyTemperature(B,26Cº);centrifugate(B,50Hz);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(B);stopCentrifugate(B);timeStep();";
+            std::string expected = "setTimeStep(200ms);loadContainer(A,10ml);loadContainer(B,0ml);applyTemperature(A,26Cº);shake(A,50Hz);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);stopShake(A);measureOD(A,5Hz,650nm);timeStep();timeStep();timeStep();timeStep();timeStep();getMeasureOD(A);timeStep();applyTemperature(A,26Cº);shake(A,50Hz);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);stopShake(A);measureOD(A,5Hz,650nm);timeStep();timeStep();timeStep();timeStep();timeStep();getMeasureOD(A);timeStep();applyTemperature(A,26Cº);shake(A,50Hz);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);stopShake(A);measureOD(A,5Hz,650nm);timeStep();timeStep();timeStep();timeStep();timeStep();getMeasureOD(A);timeStep();applyTemperature(A,26Cº);shake(A,50Hz);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);stopShake(A);measureOD(A,5Hz,650nm);timeStep();timeStep();timeStep();timeStep();timeStep();getMeasureOD(A);timeStep();applyTemperature(A,26Cº);shake(A,50Hz);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);stopShake(A);measureOD(A,5Hz,650nm);timeStep();timeStep();timeStep();timeStep();timeStep();getMeasureOD(A);timeStep();transfer(A,B,1ml);timeStep();timeStep();timeStep();timeStep();timeStep();stopTransfer(A,B);applyTemperature(B,26Cº);centrifugate(B,50Hz);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(B);stopCentrifugate(B);timeStep();timeStep();";
             qDebug() << "protocol expected execution";
             qDebug() << expected.c_str();
 
@@ -851,7 +851,7 @@ void SequentialProtocol::thermocycling() {
             qDebug() << "protocol execution";
             qDebug() << execution.c_str();
 
-            std::string expected = "setTimeStep(200ms);applyTemperature(A,60Cº);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);applyTemperature(A,30Cº);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);timeStep();applyTemperature(A,60Cº);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);applyTemperature(A,30Cº);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);timeStep();applyTemperature(A,60Cº);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);applyTemperature(A,30Cº);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);timeStep();applyTemperature(A,26Cº);centrifugate(A,50Hz);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);stopCentrifugate(A);timeStep();";
+            std::string expected = "setTimeStep(200ms);loadContainer(A,1ml);applyTemperature(A,60Cº);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);applyTemperature(A,30Cº);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);timeStep();applyTemperature(A,60Cº);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);applyTemperature(A,30Cº);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);timeStep();applyTemperature(A,60Cº);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);applyTemperature(A,30Cº);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);timeStep();applyTemperature(A,26Cº);centrifugate(A,50Hz);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);stopCentrifugate(A);timeStep();timeStep();";
             qDebug() << "protocol expected execution";
             qDebug() << expected.c_str();
 
