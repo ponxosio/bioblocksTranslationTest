@@ -1,7 +1,5 @@
-
-
 {
-  "tittle": "operations_paralel",
+  "tittle": "insert name",
   "linkedBlocks": [
     [
       {
@@ -11,29 +9,33 @@
         "duration": "10",
         "duration_units": "s",
         "block_type": "continuous_flow",
-        "continuosflow_type": "1",
         "source": {
-          "block_type": "container",
-          "containerName": "A",
-          "type": "1",
-          "destiny": "Ambient",
-          "initialVolume": "0",
-          "initialVolumeUnits": "ml"
+          "block_type": "containerList",
+          "containerList": [
+            {
+              "block_type": "container",
+              "containerName": "A",
+              "type": "1",
+              "destiny": "Ambient",
+              "initialVolume": "0",
+              "initialVolumeUnits": "ml"
+            },
+            {
+              "block_type": "container",
+              "containerName": "B",
+              "type": "1",
+              "destiny": "Ambient",
+              "initialVolume": "0",
+              "initialVolumeUnits": "ml"
+            }
+          ]
         },
-        "destination": {
-          "block_type": "container",
-          "containerName": "B",
-          "type": "1",
-          "destiny": "Ambient",
-          "rate": {
-            "block_type": "math_number",
-            "value": "10"
-          },
-          "rate_volume_units": "ml",
-          "rate_time_units": "hr",
-          "initialVolume": "0",
-          "initialVolumeUnits": "ml"
-        }
+        "rate": {
+          "block_type": "math_number",
+          "value": "10"
+        },
+        "rate_volume_units": "ml",
+        "rate_time_units": "hr"
       }
     ],
     [
@@ -44,31 +46,34 @@
         "duration": "5",
         "duration_units": "s",
         "block_type": "continuous_flow",
-        "continuosflow_type": "1",
         "source": {
-          "block_type": "container",
-          "containerName": "C",
-          "type": "1",
-          "destiny": "Ambient",
-          "initialVolume": "0",
-          "initialVolumeUnits": "ml"
+          "block_type": "containerList",
+          "containerList": [
+            {
+              "block_type": "container",
+              "containerName": "C",
+              "type": "1",
+              "destiny": "Ambient",
+              "initialVolume": "0",
+              "initialVolumeUnits": "ml"
+            },
+            {
+              "block_type": "container",
+              "containerName": "D",
+              "type": "1",
+              "destiny": "Ambient",
+              "initialVolume": "0",
+              "initialVolumeUnits": "ml"
+            }
+          ]
         },
-        "destination": {
-          "block_type": "container",
-          "containerName": "D",
-          "type": "1",
-          "destiny": "Ambient",
-          "rate": {
-            "block_type": "math_number",
-            "value": "20"
-          },
-          "rate_volume_units": "ml",
-          "rate_time_units": "hr",
-          "initialVolume": "0",
-          "initialVolumeUnits": "ml"
-        }
+        "rate": {
+          "block_type": "math_number",
+          "value": "20"
+        },
+        "rate_volume_units": "ml",
+        "rate_time_units": "hr"
       }
     ]
   ]
 }
-

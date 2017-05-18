@@ -29,7 +29,7 @@ public:
     virtual void stopShake(const std::string & idSource);
 
     virtual void startElectrophoresis(const std::string & idSource, units::ElectricField fieldStrenght);
-    virtual ElectrophoresisResult stopElectrophoresis(const std::string & idSource);
+    virtual std::shared_ptr<ElectrophoresisResult> stopElectrophoresis(const std::string & idSource);
 
     virtual units::Volume getVirtualVolume(const std::string & sourceId);
     virtual void loadContainer(const std::string & sourceId, units::Volume initialVolume);

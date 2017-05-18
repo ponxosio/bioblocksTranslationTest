@@ -55,9 +55,9 @@ void StringActuatorsInterface::startElectrophoresis(const std::string & idSource
     stream << "startElectrophoresis(" << idSource << "," << fieldStrenght.to(units::V / units::cm) << "V/cm);";
 }
 
-ElectrophoresisResult StringActuatorsInterface::stopElectrophoresis(const std::string & idSource) {
+std::shared_ptr<ElectrophoresisResult> StringActuatorsInterface::stopElectrophoresis(const std::string & idSource) {
     stream << "stopElectrophoresis(" << idSource << ");";
-    return ElectrophoresisResult();
+    return std::make_shared<ElectrophoresisResult>();
 }
 
 units::Volume StringActuatorsInterface::getVirtualVolume(const std::string & sourceId) {

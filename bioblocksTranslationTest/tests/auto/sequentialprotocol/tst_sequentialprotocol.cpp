@@ -605,7 +605,7 @@ void SequentialProtocol::ifElseElseTest() {
  * flag = 1;
  * if[-:](flag > 0) {
  *  continuosFlow[-:2s](B,A,5ml/hr);
- *  incubate[-:3s](A,20Hz,26ºC);
+ *  incubate[-:3s](A,50Hz,26ºC);
  * } else {
  *  mix[-:3s](A,vortex,50Hz);
  * }
