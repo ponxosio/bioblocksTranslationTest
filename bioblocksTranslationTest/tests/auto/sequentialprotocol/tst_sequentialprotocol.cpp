@@ -43,6 +43,7 @@ private slots:
     void nestedIfsTestB1N1Test();
     void loopTest();
     void thermocycling();
+    void turbidostat2();
 
 };
 
@@ -852,6 +853,49 @@ void SequentialProtocol::thermocycling() {
             qDebug() << execution.c_str();
 
             std::string expected = "setTimeStep(200ms);loadContainer(A,1ml);applyTemperature(A,60Cº);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);applyTemperature(A,30Cº);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);timeStep();applyTemperature(A,60Cº);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);applyTemperature(A,30Cº);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);timeStep();applyTemperature(A,60Cº);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);applyTemperature(A,30Cº);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);timeStep();applyTemperature(A,26Cº);centrifugate(A,50Hz);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopApplyTemperature(A);stopCentrifugate(A);timeStep();timeStep();";
+            qDebug() << "protocol expected execution";
+            qDebug() << expected.c_str();
+
+            QVERIFY2(execution.compare(expected) == 0, "Execution and expected execution are not the same, check debug data for seeing where");
+        } catch (std::exception & e) {
+            delete tempFile;
+            QFAIL(e.what());
+        }
+    } else {
+        delete tempFile;
+        QFAIL("imposible to create temporary file");
+    }
+    delete tempFile;
+}
+
+/*
+ * rate =50;
+ * OD = 0;
+ * while(OD < 1 || OD > 1.1) {
+ *  OD = measureOD[x:2s]();
+ *  rate = rate - (rate * (1-OD));
+ *  SetContinuousFlow([media,cell,waste], rate ml/hr)[x:10s];
+ * }
+ */
+void SequentialProtocol::turbidostat2() {
+    QTemporaryFile* tempFile = new QTemporaryFile();
+    if (tempFile->open()) {
+        try {
+            copyResourceFile(":/protocol/protocolos/turbidostat2.json", tempFile);
+
+            BioBlocksTranslator translator(1*units::s, tempFile->fileName().toStdString());
+            std::shared_ptr<ProtocolGraph> protocol = translator.translateFile();
+
+            qDebug() << protocol->toString().c_str();
+
+            StringActuatorsInterface* interface = new StringActuatorsInterface(std::vector<double>{0.5,0.8,1.2,1.05});
+            executeProtocol(protocol, interface);
+
+            std::string execution = interface->getStream().str();
+            qDebug() << "protocol execution";
+            qDebug() << execution.c_str();
+
+            std::string expected = "setTimeStep(1000ms);loadContainer(Waste,0ml);loadContainer(cell,50ml);loadContainer(media,100ml);measureOD(cell,20Hz,600nm);timeStep();timeStep();getMeasureOD(cell);setContinuosFlow(media,cell,150ml/h);setContinuosFlow(cell,Waste,150ml/h);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopContinuosFlow(media,cell);stopContinuosFlow(cell,Waste);timeStep();measureOD(cell,20Hz,600nm);timeStep();timeStep();getMeasureOD(cell);setContinuosFlow(media,cell,120ml/h);setContinuosFlow(cell,Waste,120ml/h);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopContinuosFlow(media,cell);stopContinuosFlow(cell,Waste);timeStep();measureOD(cell,20Hz,600nm);timeStep();timeStep();getMeasureOD(cell);setContinuosFlow(media,cell,144ml/h);setContinuosFlow(cell,Waste,144ml/h);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopContinuosFlow(media,cell);stopContinuosFlow(cell,Waste);timeStep();measureOD(cell,20Hz,600nm);timeStep();timeStep();getMeasureOD(cell);setContinuosFlow(media,cell,151.2ml/h);setContinuosFlow(cell,Waste,151.2ml/h);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopContinuosFlow(media,cell);stopContinuosFlow(cell,Waste);timeStep();timeStep();timeStep();";
             qDebug() << "protocol expected execution";
             qDebug() << expected.c_str();
 
