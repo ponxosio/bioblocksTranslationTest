@@ -16,5 +16,6 @@
         <file>protocolos/nestedIf.json</file>
         <file>protocolos/loop.json</file>
         <file>protocolos/thermocycling.json</file>
+        <file>protocolos/turbidostat2.json</file>
     </qresource>
 </RCC>
