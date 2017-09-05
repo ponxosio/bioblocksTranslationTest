@@ -1,0 +1,35 @@
+{
+  "tittle": "insert name",
+  "linkedBlocks": [
+    [
+      {
+        "timeOfOperation": "0",
+        "timeOfOperation_units": "s",
+        "linked": "FALSE",
+        "duration": "30",
+        "duration_units": "s",
+        "block_type": "mix",
+        "type": "1",
+        "mix_speed": {
+          "block_type": "math_number",
+          "value": "20"
+        },
+        "mix_speed_units": "hz",
+        "source": {
+          "block_type": "container",
+          "containerName": "A",
+          "type": "1",
+          "destiny": "Ambient",
+          "initialVolume": "0",
+          "initialVolumeUnits": "ml"
+        },
+        "heat_checbox": "TRUE",
+        "heat": {
+          "block_type": "math_number",
+          "value": "20"
+        },
+        "heat_units": "c"
+      }
+    ]
+  ]
+}

@@ -44,6 +44,7 @@ private slots:
     void loopTest();
     void thermocycling();
     void turbidostat2();
+    void mixHeat();
 
 };
 
@@ -896,6 +897,44 @@ void SequentialProtocol::turbidostat2() {
             qDebug() << execution.c_str();
 
             std::string expected = "setTimeStep(1000ms);loadContainer(Waste,0ml);loadContainer(cell,50ml);loadContainer(media,100ml);measureOD(cell,20Hz,600nm);timeStep();timeStep();getMeasureOD(cell);setContinuosFlow(media,cell,150ml/h);setContinuosFlow(cell,Waste,150ml/h);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopContinuosFlow(media,cell);stopContinuosFlow(cell,Waste);timeStep();measureOD(cell,20Hz,600nm);timeStep();timeStep();getMeasureOD(cell);setContinuosFlow(media,cell,120ml/h);setContinuosFlow(cell,Waste,120ml/h);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopContinuosFlow(media,cell);stopContinuosFlow(cell,Waste);timeStep();measureOD(cell,20Hz,600nm);timeStep();timeStep();getMeasureOD(cell);setContinuosFlow(media,cell,144ml/h);setContinuosFlow(cell,Waste,144ml/h);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopContinuosFlow(media,cell);stopContinuosFlow(cell,Waste);timeStep();measureOD(cell,20Hz,600nm);timeStep();timeStep();getMeasureOD(cell);setContinuosFlow(media,cell,151.2ml/h);setContinuosFlow(cell,Waste,151.2ml/h);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopContinuosFlow(media,cell);stopContinuosFlow(cell,Waste);timeStep();timeStep();timeStep();";
+            qDebug() << "protocol expected execution";
+            qDebug() << expected.c_str();
+
+            QVERIFY2(execution.compare(expected) == 0, "Execution and expected execution are not the same, check debug data for seeing where");
+        } catch (std::exception & e) {
+            delete tempFile;
+            QFAIL(e.what());
+        }
+    } else {
+        delete tempFile;
+        QFAIL("imposible to create temporary file");
+    }
+    delete tempFile;
+}
+
+/*
+ * mix(A,20Hz)[-:30s]
+ * applyTemperature(A,20ºC)[-:30s]
+ */
+void SequentialProtocol::mixHeat() {
+    QTemporaryFile* tempFile = new QTemporaryFile();
+    if (tempFile->open()) {
+        try {
+            copyResourceFile(":/protocol/protocolos/mix_test_v2.json", tempFile);
+
+            BioBlocksTranslator translator(10*units::s, tempFile->fileName().toStdString());
+            std::shared_ptr<ProtocolGraph> protocol = translator.translateFile();
+
+            qDebug() << protocol->toString().c_str();
+
+            StringActuatorsInterface* interface = new StringActuatorsInterface(std::vector<double>{});
+            executeProtocol(protocol, interface);
+
+            std::string execution = interface->getStream().str();
+            qDebug() << "protocol execution";
+            qDebug() << execution.c_str();
+
+            std::string expected = "setTimeStep(10000ms);loadContainer(A,0ml);stir(A,20Hz);applyTemperature(A,20Cº);timeStep();timeStep();timeStep();stopStir(A);stopApplyTemperature(A);timeStep();timeStep();";
             qDebug() << "protocol expected execution";
             qDebug() << expected.c_str();
 
