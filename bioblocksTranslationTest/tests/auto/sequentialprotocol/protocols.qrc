@@ -18,5 +18,6 @@
         <file>protocolos/thermocycling.json</file>
         <file>protocolos/turbidostat2.json</file>
         <file>protocolos/mix_test_v2.json</file>
+        <file>protocolos/evoprog_switching_protocol.json</file>
     </qresource>
 </RCC>

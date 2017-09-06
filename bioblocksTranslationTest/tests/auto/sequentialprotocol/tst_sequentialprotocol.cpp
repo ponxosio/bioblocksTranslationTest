@@ -45,6 +45,7 @@ private slots:
     void thermocycling();
     void turbidostat2();
     void mixHeat();
+    void evoproSwitching();
 
 };
 
@@ -935,6 +936,40 @@ void SequentialProtocol::mixHeat() {
             qDebug() << execution.c_str();
 
             std::string expected = "setTimeStep(10000ms);loadContainer(A,0ml);stir(A,20Hz);applyTemperature(A,20Cº);timeStep();timeStep();timeStep();stopStir(A);stopApplyTemperature(A);timeStep();timeStep();";
+            qDebug() << "protocol expected execution";
+            qDebug() << expected.c_str();
+
+            QVERIFY2(execution.compare(expected) == 0, "Execution and expected execution are not the same, check debug data for seeing where");
+        } catch (std::exception & e) {
+            delete tempFile;
+            QFAIL(e.what());
+        }
+    } else {
+        delete tempFile;
+        QFAIL("imposible to create temporary file");
+    }
+    delete tempFile;
+}
+
+void SequentialProtocol::evoproSwitching() {
+    QTemporaryFile* tempFile = new QTemporaryFile();
+    if (tempFile->open()) {
+        try {
+            copyResourceFile(":/protocol/protocolos/evoprog_switching_protocol.json", tempFile);
+
+            BioBlocksTranslator translator(4*units::minute, tempFile->fileName().toStdString());
+            std::shared_ptr<ProtocolGraph> protocol = translator.translateFile();
+
+            qDebug() << protocol->toString().c_str();
+
+            StringActuatorsInterface* interface = new StringActuatorsInterface(std::vector<double>{});
+            executeProtocol(protocol, interface);
+
+            std::string execution = interface->getStream().str();
+            qDebug() << "protocol execution";
+            qDebug() << execution.c_str();
+
+            std::string expected = "setTimeStep(240000ms);loadContainer(chemoA,0ml);loadContainer(chemoB,0ml);loadContainer(cellstat,0ml);loadContainer(mediaA,149ml);loadContainer(wasteC,0ml);loadContainer(mediaB,149ml);loadContainer(wasteB,0ml);loadContainer(wasteA,0ml);stir(chemoA,20Hz);applyTemperature(chemoA,37Cº);stir(chemoB,20Hz);applyTemperature(chemoB,37Cº);stir(cellstat,20Hz);applyTemperature(cellstat,37Cº);setContinuosFlow(mediaA,chemoA,21ml/h);setContinuosFlow(chemoA,cellstat,21ml/h);setContinuosFlow(cellstat,wasteC,21ml/h);setContinuosFlow(mediaB,chemoB,21ml/h);setContinuosFlow(chemoB,wasteB,21ml/h);timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();timeStep();stopContinuosFlow(mediaA,chemoA);stopContinuosFlow(chemoA,cellstat);stopContinuosFlow(cellstat,wasteC);stopContinuosFlow(mediaB,chemoB);stopContinuosFlow(chemoB,wasteB);setContinuosFlow(mediaB,chemoB,21ml/h);setContinuosFlow(chemoB,cellstat,21ml/h);setContinuosFlow(cellstat,wasteC,21ml/h);setContinuosFlow(mediaA,chemoA,21ml/h);setContinuosFlow(chemoA,wasteA,21ml/h);timeStep();timeStep();timeStep();stopContinuosFlow(mediaB,chemoB);stopContinuosFlow(chemoB,cellstat);stopContinuosFlow(cellstat,wasteC);stopContinuosFlow(mediaA,chemoA);stopContinuosFlow(chemoA,wasteA);setContinuosFlow(mediaB,chemoB,21ml/h);setContinuosFlow(chemoB,wasteB,21ml/h);setContinuosFlow(mediaA,chemoA,21ml/h);setContinuosFlow(chemoA,cellstat,21ml/h);setContinuosFlow(cellstat,wasteC,21ml/h);timeStep();timeStep();stopContinuosFlow(mediaB,chemoB);stopContinuosFlow(chemoB,wasteB);stopContinuosFlow(mediaA,chemoA);stopContinuosFlow(chemoA,cellstat);stopContinuosFlow(cellstat,wasteC);setContinuosFlow(mediaB,chemoB,21ml/h);setContinuosFlow(chemoB,cellstat,21ml/h);setContinuosFlow(cellstat,wasteC,21ml/h);setContinuosFlow(mediaA,chemoA,21ml/h);setContinuosFlow(chemoA,wasteA,21ml/h);timeStep();timeStep();timeStep();stopContinuosFlow(mediaB,chemoB);stopContinuosFlow(chemoB,cellstat);stopContinuosFlow(cellstat,wasteC);stopContinuosFlow(mediaA,chemoA);stopContinuosFlow(chemoA,wasteA);setContinuosFlow(mediaB,chemoB,21ml/h);setContinuosFlow(chemoB,wasteB,21ml/h);setContinuosFlow(mediaA,chemoA,21ml/h);setContinuosFlow(chemoA,cellstat,21ml/h);setContinuosFlow(cellstat,wasteC,21ml/h);timeStep();timeStep();stopContinuosFlow(mediaB,chemoB);stopContinuosFlow(chemoB,wasteB);stopContinuosFlow(mediaA,chemoA);stopContinuosFlow(chemoA,cellstat);stopContinuosFlow(cellstat,wasteC);setContinuosFlow(mediaB,chemoB,21ml/h);setContinuosFlow(chemoB,cellstat,21ml/h);setContinuosFlow(cellstat,wasteC,21ml/h);setContinuosFlow(mediaA,chemoA,21ml/h);setContinuosFlow(chemoA,wasteA,21ml/h);timeStep();timeStep();timeStep();stopContinuosFlow(mediaB,chemoB);stopContinuosFlow(chemoB,cellstat);stopContinuosFlow(cellstat,wasteC);stopContinuosFlow(mediaA,chemoA);stopContinuosFlow(chemoA,wasteA);setContinuosFlow(mediaB,chemoB,21ml/h);setContinuosFlow(chemoB,wasteB,21ml/h);setContinuosFlow(mediaA,chemoA,21ml/h);setContinuosFlow(chemoA,cellstat,21ml/h);setContinuosFlow(cellstat,wasteC,21ml/h);timeStep();timeStep();stopContinuosFlow(mediaB,chemoB);stopContinuosFlow(chemoB,wasteB);stopContinuosFlow(mediaA,chemoA);stopContinuosFlow(chemoA,cellstat);stopContinuosFlow(cellstat,wasteC);setContinuosFlow(mediaB,chemoB,21ml/h);setContinuosFlow(chemoB,cellstat,21ml/h);setContinuosFlow(cellstat,wasteC,21ml/h);setContinuosFlow(mediaA,chemoA,21ml/h);setContinuosFlow(chemoA,wasteA,21ml/h);timeStep();timeStep();timeStep();stopContinuosFlow(mediaB,chemoB);stopContinuosFlow(chemoB,cellstat);stopContinuosFlow(cellstat,wasteC);stopContinuosFlow(mediaA,chemoA);stopContinuosFlow(chemoA,wasteA);setContinuosFlow(mediaB,chemoB,21ml/h);setContinuosFlow(chemoB,wasteB,21ml/h);setContinuosFlow(mediaA,chemoA,21ml/h);setContinuosFlow(chemoA,cellstat,21ml/h);setContinuosFlow(cellstat,wasteC,21ml/h);timeStep();timeStep();stopContinuosFlow(mediaB,chemoB);stopContinuosFlow(chemoB,wasteB);stopContinuosFlow(mediaA,chemoA);stopContinuosFlow(chemoA,cellstat);stopContinuosFlow(cellstat,wasteC);setContinuosFlow(mediaB,chemoB,21ml/h);setContinuosFlow(chemoB,cellstat,21ml/h);setContinuosFlow(cellstat,wasteC,21ml/h);setContinuosFlow(mediaA,chemoA,21ml/h);setContinuosFlow(chemoA,wasteA,21ml/h);timeStep();timeStep();timeStep();stopContinuosFlow(mediaB,chemoB);stopContinuosFlow(chemoB,cellstat);stopContinuosFlow(cellstat,wasteC);stopContinuosFlow(mediaA,chemoA);stopContinuosFlow(chemoA,wasteA);setContinuosFlow(mediaB,chemoB,21ml/h);setContinuosFlow(chemoB,wasteB,21ml/h);setContinuosFlow(mediaA,chemoA,21ml/h);setContinuosFlow(chemoA,cellstat,21ml/h);setContinuosFlow(cellstat,wasteC,21ml/h);timeStep();timeStep();stopStir(chemoA);stopApplyTemperature(chemoA);stopStir(chemoB);stopApplyTemperature(chemoB);stopStir(cellstat);stopApplyTemperature(cellstat);stopContinuosFlow(mediaB,chemoB);stopContinuosFlow(chemoB,wasteB);stopContinuosFlow(mediaA,chemoA);stopContinuosFlow(chemoA,cellstat);stopContinuosFlow(cellstat,wasteC);timeStep();timeStep();";
             qDebug() << "protocol expected execution";
             qDebug() << expected.c_str();
 
